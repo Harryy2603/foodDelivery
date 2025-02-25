@@ -54,22 +54,23 @@ const placeOrder = async(req,res) =>{
 }
 
 
-const verifyOrder = async(req,res)=>{
-    const {orderId,success} = req.body;
+const verifyOrder = async (req, res) => {
+    const { orderId, success } = req.query;  // ✅ Read from query parameters
+
     try {
-        if (success=="true") {
-            await orderModel.findByIdAndUpdate(orderId,{payment:true});
-            res.json({success:true,message:"Paid"})
-        }
-        else{
+        if (success === "true") {
+            await orderModel.findByIdAndUpdate(orderId, { payment: true });
+            res.json({ success: true, message: "Paid" });
+        } else {
             await orderModel.findByIdAndDelete(orderId);
-            res.json({success:false,message:"Not Paid"})
+            res.json({ success: false, message: "Not Paid" });
         }
     } catch (error) {
         console.log(error);
-        res.json({success:false,message:"error"})
+        res.json({ success: false, message: "error" });
     }
-}
+};
+
 
 //user order for frontend
 const userOrders = async(req,res) =>{
